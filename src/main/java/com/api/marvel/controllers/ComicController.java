@@ -42,7 +42,7 @@ public class ComicController {
      * @param comicId El ID del cómic a buscar.
      * @return ResponseEntity que contiene un {@link ComicDTO} con la información del cómic encontrado
      */
-    @GetMapping()
+    @GetMapping("/find/{comicId}")
     public ResponseEntity<ComicDTO> findById(@PathVariable int comicId){
         return new ResponseEntity<>(this.comicService.findById(comicId), HttpStatus.OK);
     }
