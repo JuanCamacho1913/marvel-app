@@ -8,5 +8,5 @@ import java.util.List;
 public interface CharacterService {
     List<CharacterDTO> findCharacters(String name, int[] comics, int[] series, int offset, int limit);
 
-    CharacterInfoDTO findCharacterByName(String characterName);
+    CharacterInfoDTO findCharacterById(Long characterId);
 }
