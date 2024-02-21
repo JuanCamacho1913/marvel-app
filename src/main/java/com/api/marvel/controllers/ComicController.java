@@ -20,6 +20,10 @@ public class ComicController {
 
     private ComicService comicService;
 
+    public ComicController(ComicService comicService) {
+        this.comicService = comicService;
+    }
+
     /**
      * Busca y devuelve los cómics asociados a un ID de personaje específico.
      *

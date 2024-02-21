@@ -19,6 +19,10 @@ public class CharacterController {
 
     private CharacterService characterService;
 
+    public CharacterController(CharacterService characterService) {
+        this.characterService = characterService;
+    }
+
     /**
      * Busca y devuelve una lista de personajes basada en los criterios de búsqueda proporcionados.
      * Los parámetros de búsqueda son opcionales y se pueden combinar para filtrar los resultados.
@@ -43,8 +47,8 @@ public class CharacterController {
     /**
      * Busca y devuelve la información detallada de un personaje específico basándose en su nombre.
      */
-    @GetMapping("/find/{characterName}")
-    public ResponseEntity<CharacterInfoDTO> findCharacterByName(@PathVariable String characterName){
-        return new ResponseEntity<>(this.characterService.findCharacterByName(characterName) , HttpStatus.OK);
+    @GetMapping("/find/{characterId}")
+    public ResponseEntity<CharacterInfoDTO> findCharacterById(@PathVariable Long characterId){
+        return new ResponseEntity<>(this.characterService.findCharacterById(characterId) , HttpStatus.OK);
     }
 }
