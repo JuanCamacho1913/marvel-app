@@ -18,6 +18,7 @@ public class ComicRepository {
 
     private HttpClientServiceImpl httpClientService;
 
+
     public ComicRepository(ApiMarvelConfig apiMarvelConfig, HttpClientServiceImpl httpClientService) {
         this.apiMarvelConfig = apiMarvelConfig;
         this.httpClientService = httpClientService;
