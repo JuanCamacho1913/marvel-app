@@ -3,6 +3,7 @@ package com.api.marvel.persistence;
 import com.api.marvel.config.ApiMarvelConfig;
 import com.api.marvel.controllers.dto.CharacterDTO;
 import com.api.marvel.controllers.dto.CharacterInfoDTO;
+import com.api.marvel.mappers.CharacterMapper;
 import com.api.marvel.services.impl.HttpClientServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
@@ -19,10 +20,12 @@ public class CharacterRepository {
 
     private ApiMarvelConfig apiMarvelConfig;
     private HttpClientServiceImpl httpClientService;
+    private CharacterMapper characterMapper;
 
-    public CharacterRepository(ApiMarvelConfig apiMarvelConfig, HttpClientServiceImpl httpClientService) {
+    public CharacterRepository(ApiMarvelConfig apiMarvelConfig, HttpClientServiceImpl httpClientService, CharacterMapper characterMapper) {
         this.apiMarvelConfig = apiMarvelConfig;
         this.httpClientService = httpClientService;
+        this.characterMapper = characterMapper;
     }
 
     @Value("${integration.marvel.base.path}")
@@ -57,17 +60,19 @@ public class CharacterRepository {
 
         JsonNode response = httpClientService.httpGet(characterPath, marvelQueryParams, JsonNode.class);
 
-        return null;
+        List<CharacterDTO> characterList = characterMapper.getCharacterDTOList(response);
+        return characterList;
     }
 
     public CharacterInfoDTO findCharacterById(Long characterId) {
         Map<String, String> marvelQueryParams = apiMarvelConfig.getAuthorizationParams();
 
-        String finalUrl = characterPath.concat(String.valueOf(characterId));
+        String finalUrl = characterPath.concat("/").concat(String.valueOf(characterId));
 
         JsonNode response = httpClientService.httpGet(finalUrl, marvelQueryParams, JsonNode.class);
 
-        return null;
+        CharacterInfoDTO characterInfoDTO = characterMapper.getCharacterInfoDTO(response);
+        return characterInfoDTO;
     }
 
     public String convertArrayToString(int[] intArray) {
