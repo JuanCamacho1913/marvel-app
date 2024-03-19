@@ -36,10 +36,9 @@ public class ComicRepository {
 
     public List<ComicDTO> findComicByCharacter(int characterId) {
         Map<String, String> marvelQueryParam = apiMarvelConfig.getAuthorizationParams();
+        marvelQueryParam.put("characters", String.valueOf(characterId));
 
-        String finalUrl = basePath.concat("/").concat("characters").concat(String.valueOf(characterId));
-
-        JsonNode response = httpClientService.httpGet(finalUrl, marvelQueryParam, JsonNode.class);
+        JsonNode response = httpClientService.httpGet(comicPath, marvelQueryParam, JsonNode.class);
         return null;
     }
 
@@ -54,7 +53,7 @@ public class ComicRepository {
     public ComicDTO findById(int comicId) {
         Map<String, String> marvelQueryParam = apiMarvelConfig.getAuthorizationParams();
 
-        String finalUrl = comicPath.concat(String.valueOf(comicId));
+        String finalUrl = comicPath.concat("/").concat(String.valueOf(comicId));
 
         JsonNode response = httpClientService.httpGet(finalUrl, marvelQueryParam, JsonNode.class);
 
