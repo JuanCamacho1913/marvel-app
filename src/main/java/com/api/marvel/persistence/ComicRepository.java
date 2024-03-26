@@ -2,6 +2,7 @@ package com.api.marvel.persistence;
 
 import com.api.marvel.config.ApiMarvelConfig;
 import com.api.marvel.controllers.dto.ComicDTO;
+import com.api.marvel.mappers.ComicMapper;
 import com.api.marvel.services.impl.HttpClientServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
@@ -18,10 +19,13 @@ public class ComicRepository {
 
     private HttpClientServiceImpl httpClientService;
 
+    private ComicMapper comicMapper;
 
-    public ComicRepository(ApiMarvelConfig apiMarvelConfig, HttpClientServiceImpl httpClientService) {
+
+    public ComicRepository(ApiMarvelConfig apiMarvelConfig, HttpClientServiceImpl httpClientService, ComicMapper comicMapper) {
         this.apiMarvelConfig = apiMarvelConfig;
         this.httpClientService = httpClientService;
+        this.comicMapper = comicMapper;
     }
 
     @Value("${integration.marvel.base.path}")
@@ -39,7 +43,10 @@ public class ComicRepository {
         marvelQueryParam.put("characters", String.valueOf(characterId));
 
         JsonNode response = httpClientService.httpGet(comicPath, marvelQueryParam, JsonNode.class);
-        return null;
+
+        List<ComicDTO> comicList = comicMapper.getComicDTOListId(response);
+
+        return comicList;
     }
 
     public List<ComicDTO> findAllComics() {
@@ -47,7 +54,9 @@ public class ComicRepository {
 
         JsonNode response = httpClientService.httpGet(comicPath, marvelQueryParam, JsonNode.class);
 
-        return null;
+        List<ComicDTO> comicList = comicMapper.getComicDTOList(response);
+
+        return comicList;
     }
 
     public ComicDTO findById(int comicId) {
@@ -57,6 +66,8 @@ public class ComicRepository {
 
         JsonNode response = httpClientService.httpGet(finalUrl, marvelQueryParam, JsonNode.class);
 
-        return null;
+        ComicDTO comicDTO = comicMapper.getComicDTOId(response);
+
+        return comicDTO;
     }
 }
