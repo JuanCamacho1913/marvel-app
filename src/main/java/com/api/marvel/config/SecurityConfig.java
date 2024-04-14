@@ -1,6 +1,8 @@
 package com.api.marvel.config;
 
+import com.api.marvel.config.filter.JwtTokenValidation;
 import com.api.marvel.services.impl.UserDetailServiceImpl;
+import com.api.marvel.util.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,8 +37,8 @@ public class SecurityConfig {
                     //Endpoints para iniciar sesion
 
                     /*Define the private endpoints*/
-                   // request.requestMatchers(HttpMethod.GET, "/character/find").hasAuthority("READ_CHARACTER");
-                   // request.requestMatchers(HttpMethod.GET, "/character/find/{characterId}").hasAuthority("READ_CHARACTER");
+                    // request.requestMatchers(HttpMethod.GET, "/character/find").hasAuthority("READ_CHARACTER");
+                    // request.requestMatchers(HttpMethod.GET, "/character/find/{characterId}").hasAuthority("READ_CHARACTER");
 
                     request.requestMatchers(HttpMethod.GET, "/character/find").hasAnyRole("ADMIN", "USER");
                     request.requestMatchers(HttpMethod.GET, "/character/find/{characterId}").hasRole("ADMIN");
