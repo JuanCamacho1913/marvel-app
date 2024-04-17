@@ -19,10 +19,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private JwtUtils jwtUtils;
+
+    public SecurityConfig(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,23 +40,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
 
                     /*Define the public endpoints*/
-                    //Endpoinds para registrar
-                    //Endpoints para iniciar sesion
+                    request.requestMatchers(HttpMethod.GET, "/auth/log-in").permitAll();
 
                     /*Define the private endpoints*/
-                    // request.requestMatchers(HttpMethod.GET, "/character/find").hasAuthority("READ_CHARACTER");
-                    // request.requestMatchers(HttpMethod.GET, "/character/find/{characterId}").hasAuthority("READ_CHARACTER");
-
                     request.requestMatchers(HttpMethod.GET, "/character/find").hasAnyRole("ADMIN", "USER");
                     request.requestMatchers(HttpMethod.GET, "/character/find/{characterId}").hasRole("ADMIN");
 
-                    request.requestMatchers(HttpMethod.GET, "/comic/find").hasAuthority("READ_COMIC");
-                    request.requestMatchers(HttpMethod.GET, "/comic/findAll").hasAuthority("READ_COMIC");
-                    request.requestMatchers(HttpMethod.GET, "/comic/find/{comicId}").hasAuthority("READ_COMIC");
+                    request.requestMatchers(HttpMethod.GET, "/comic/find").hasAnyRole("ADMIN", "USER");
+                    request.requestMatchers(HttpMethod.GET, "/comic/findAll").hasAnyRole("ADMIN", "USER");
+                    request.requestMatchers(HttpMethod.GET, "/comic/find/{comicId}").hasRole("ADMIN");
 
                     /*The rest of endpoints*/
                     request.anyRequest().denyAll();
-                });
+                })
+                .addFilterBefore(new JwtTokenValidation(jwtUtils), BasicAuthenticationFilter.class);
 
         return http.build();
     }
