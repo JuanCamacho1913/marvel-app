@@ -1,5 +1,6 @@
 package com.api.marvel.controllers;
 
+import com.api.marvel.controllers.dto.AuthCreateUserRequest;
 import com.api.marvel.controllers.dto.AuthLoginRequest;
 import com.api.marvel.controllers.dto.AuthResponse;
 import com.api.marvel.services.impl.UserDetailServiceImpl;
@@ -18,8 +19,13 @@ public class AuthController {
         this.userDetailService = userDetailService;
     }
 
-    @GetMapping("/log-in")
+    @PostMapping("/log-in")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthLoginRequest authLoginRequest){
         return new ResponseEntity<>(userDetailService.loginUser(authLoginRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthCreateUserRequest authCreateUserRequest){
+        return new ResponseEntity<>(userDetailService.createUser(authCreateUserRequest), HttpStatus.OK);
     }
 }
