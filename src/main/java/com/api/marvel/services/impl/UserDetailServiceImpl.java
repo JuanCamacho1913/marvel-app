@@ -9,6 +9,7 @@ import com.api.marvel.persistence.repositories.RoleRepository;
 import com.api.marvel.persistence.repositories.UserRepository;
 import com.api.marvel.util.JwtUtils;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -148,5 +149,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
         AuthResponse authResponse = new AuthResponse(username, "Usuario creado correctamente", accessToken, true);
 
         return authResponse;
+    }
+
+    public String getUserLoggedIn(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken)){
+            throw new AuthenticationCredentialsNotFoundException("Se requiere la autenticacion completa");
+        }
+
+        return authentication.getPrincipal().toString();
     }
 }
