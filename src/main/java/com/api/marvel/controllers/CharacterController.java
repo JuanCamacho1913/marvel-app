@@ -2,6 +2,7 @@ package com.api.marvel.controllers;
 
 import com.api.marvel.controllers.dto.CharacterDTO;
 import com.api.marvel.controllers.dto.CharacterInfoDTO;
+import com.api.marvel.controllers.dto.ComicDTO;
 import com.api.marvel.services.CharacterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,6 @@ public class CharacterController {
      * @param offset Opcional. Número de resultados a saltar para la paginación. Por defecto es "0".
      * @return ResponseEntity que contiene una lista de {@link CharacterDTO} que coinciden con los criterios de búsqueda.
      */
-
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/find")
     public ResponseEntity<List<CharacterDTO>> findCharacters(@RequestParam(required = false) String name,
@@ -48,7 +48,9 @@ public class CharacterController {
     }
 
     /**
-     * Busca y devuelve la información detallada de un personaje específico basándose en su nombre.
+     * Busca y devuelve la información detallada de un personaje específico basándose en su identificador (ID).
+     * @param  characterId El ID del personaje a buscar.
+     * @return ResponseEntity que contiene un {@link CharacterInfoDTO} con la información del personaje encontrado.
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/find/{characterId}")
