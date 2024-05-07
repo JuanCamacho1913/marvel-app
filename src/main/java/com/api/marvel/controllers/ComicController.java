@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Controlador para gestionar solicitudes relacionadas con comics.
- * Proporciona endpoints para operaciones CRUD sobre usuarios.
+ * Proporciona endpoints para operaciones CRUD sobre comics.
  */
 @RestController
 @RequestMapping("/comic")
@@ -27,9 +27,8 @@ public class ComicController {
 
     /**
      * Busca y devuelve los cómics asociados a un ID de personaje específico.
-     *
      * @param characterId El ID del personaje cuyos cómics se quieren encontrar.
-     * @return ResponseEntity que contiene un {@link ComicDTO} con los cómics asociados al personaje especificado
+     * @return ResponseEntity que contiene un {@link ComicDTO} con los cómics asociados al personaje especificado.
      */
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/find")
@@ -37,6 +36,11 @@ public class ComicController {
         return new ResponseEntity<>(this.comicService.findComicByCharacter(characterId), HttpStatus.OK);
     }
 
+
+    /**
+     * Busca y devuelve un listado de cómics.
+     * @return ResponseEntity que contiene un {@link ComicDTO} con la lista de comics encontrados.
+     */
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/findAll")
     public ResponseEntity<List<ComicDTO>> findAll(){
@@ -45,9 +49,8 @@ public class ComicController {
 
     /**
      * Busca y devuelve un cómic específico basado en su ID.
-     *
-     * @param comicId El ID del cómic a buscar.
-     * @return ResponseEntity que contiene un {@link ComicDTO} con la información del cómic encontrado
+     * @param  comicId El ID del cómic a buscar.
+     * @return ResponseEntity que contiene un {@link ComicDTO} con la información del cómic encontrado.
      */
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/find/{comicId}")
